@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 
 export const createUser = async (req: Request, res: Response) => {
     console.log("create user");
