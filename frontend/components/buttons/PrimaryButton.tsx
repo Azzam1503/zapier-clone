@@ -6,7 +6,7 @@ const PrimaryButton = ({children, onClick, size = "small"}: {
     size?: "big" | "small"
 }) => {
     return <div className={`${size === "small"  ? "text-sm" : "text-xl"} 
-    ${size === "small"  ? "px-4 pt-1" : "px-10 py-3"} bg-amber-700 rounded-full text-white cursor-pointer hover:shadow-md`} onClick={onClick}>
+    ${size === "small"  ? "px-4 pt-1" : "px-10 py-3"} bg-amber-700 rounded-full text-white cursor-pointer hover:shadow-md text-center`} onClick={onClick}>
         {children}
     </div>
 }
