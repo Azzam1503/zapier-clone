@@ -15,6 +15,7 @@ const authCheck = async (req: CustomRequest, res: Response, next: NextFunction) 
         if(!token) return res.status(403).json({success: false, message: "user not logged in"});
         const decoded = jwt.verify(token, JWT_PASSWORD);
         if(!decoded) return res.status(403).json({success: false, message: "Unauthorized"});
+        console.log(decoded.sub);
         const user = await prismaClient.user.findFirst({
             where:{
                 id: Number(decoded.sub)
@@ -23,7 +24,6 @@ const authCheck = async (req: CustomRequest, res: Response, next: NextFunction) 
 
         if (!user) return res.status(403).json({ success: false, message: "Unauthorized" });
         const { password, ...userWithoutPassword } = user;
-
         req.user = userWithoutPassword;
         next();
     } catch (error) {

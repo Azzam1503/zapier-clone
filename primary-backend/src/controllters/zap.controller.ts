@@ -4,34 +4,37 @@ import { prismaClient } from "../db";
 import { CustomRequest } from "../middlewares/auth.middleware";
 
 export const createZap = async (req: CustomRequest, res: Response) => {
-    console.log("create zap");
-    const body = req.body();
-    const parsedData = ZapCreateSchema.safeParse(req.body);
-    const id = req.user?.id;
+    console.log("here baby");
+    try {
+    const body = req.body;
+    const parsedData = ZapCreateSchema.safeParse(body);
+    const id = req?.user?.id;
+    console.log("req user",id);
+    console.log(parsedData.error);
     if(!parsedData.success) return res.status(411).json({message: "Incorrect Inputs"});
-    await prismaClient.$transaction(async tx => {
+    const newZap = await prismaClient.$transaction(async tx => {
         const zap = await tx.zap.create({
             data: {
             userId: Number(id),
             triggerId: "",
             actions: {
                 create: parsedData.data.actions.map((x, index) => ({
-                    actionId: x.availableAfctionId,
+                    actionId: x.availableActionId,
                     sortingOrder: index
                 }))
             }
             }
             
         });
-
+        console.log(zap)
         const trigger = await tx.trigger.create({
             data: {
                 trigerrId: parsedData.data.availableTriggerId,
                 zapId: zap.id
             }
         })
-
-        await tx.zap.update({
+        console.log("trigger", trigger)
+        const updted = await tx.zap.update({
             where: {
                 id: zap.id
             },
@@ -39,8 +42,14 @@ export const createZap = async (req: CustomRequest, res: Response) => {
                 triggerId: trigger.id
             }
         })
-
-    })
+        return zap;
+    });
+    console.log("new--zap", newZap);
+    // @ts-ignore
+    return res.json({newZap});
+    } catch (error) {
+        console.log("in zap create", error);
+    }
 };
 
 export const getZaps = async (req: Request, res: Response) => {
@@ -76,11 +85,24 @@ export const getZaps = async (req: Request, res: Response) => {
 
 export const getZap = async (req: CustomRequest, res: Response) => {
     try {
+        console.log("get zap clled")
         const zapId = req.params.zapId;
         const zap = await prismaClient.zap.findFirst({
             where:{
                 id: zapId
-            }
+            },
+            include: {
+                actions: {
+                    include: {
+                        type: true
+                    }
+                },
+                trigger: {
+                    include: {
+                        type: true
+                    }
+                }
+            },
         });
         console.log(zap);
         if(zap?.userId != req.user?.id){
