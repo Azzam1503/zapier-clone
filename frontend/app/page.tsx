@@ -1,13 +1,15 @@
 import { Appbar } from "@/components/Appbar";
 import Hero from "@/components/Hero";
-import Image from "next/image";
+import HeroVideo from "@/components/HeroVideo";
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="pb-48">
       <Appbar />
        <Hero />
-      {/* <HeroVideo /> */}
+      <div className="pt-8">
+        <HeroVideo />
+      </div>
     </main>
   );
 }
