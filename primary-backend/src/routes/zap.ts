@@ -1,9 +1,11 @@
 import Router from "express";
-import { createZap, getZap } from "../controllters/zap.controller";
+import { createZap, getZap, getZaps } from "../controllters/zap.controller";
+import authCheck from "../middlewares/auth.middleware";
 
 const router = Router();
 
-router.post("/", createZap);
-router.get("/:id", getZap);
+router.post("/", authCheck, createZap);
+router.post("/zaps", authCheck, getZaps);
+router.get("/:id", authCheck, getZap);
 
 export default Router;

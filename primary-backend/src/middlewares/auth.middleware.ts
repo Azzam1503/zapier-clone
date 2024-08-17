@@ -4,7 +4,7 @@ import { JWT_PASSWORD } from "../config";
 import { prismaClient } from "../db";
 import { User } from "@prisma/client";
 
-interface CustomRequest extends Request{
+export interface CustomRequest extends Request{
     user?: Omit<User, 'password'>
 }
 
