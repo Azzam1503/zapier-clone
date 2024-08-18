@@ -4,6 +4,8 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 import { CheckFeature } from "@/components/CheckFeature";
 import Input from "@/components/Input";
 import { useState } from "react"
+import { BACKEND_URL } from "../config";
+import axios from "axios";
 
 export default () => {
     const [detail, setDetails] = useState({
@@ -13,8 +15,8 @@ export default () => {
         }
     );
 console.log(detail)
-    const handleChange = (e: React.FormEvent) => {
-        const [name, value] = e.target;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = e.target;
         setDetails((prev) => ({...prev, [name]: value}));
     }
     return (
@@ -35,11 +37,18 @@ console.log(detail)
                     </div>
         </div>
             <div className="flex-1 pb-6 pt-6 mt-12 px-4 border">
-                <Input label="name" placeholder="name" onChange={handleChange} />
-                <Input label="email" placeholder="email" onChange={handleChange} />
-                <Input label="password" placeholder="passowrd" type="password" onChange={handleChange} />
+                <Input label="name" name="name" placeholder="name" onChange={handleChange} />
+                <Input label="email" name="email" placeholder="email" onChange={handleChange} />
+                <Input label="password" name="password" placeholder="passowrd" type="password" onChange={handleChange} />
                 <br />
-                <PrimaryButton size="big" onClick={() => {}}>Sign up</PrimaryButton>
+                <PrimaryButton size="big" onClick={async () => {
+                    const res = await axios.post(`${BACKEND_URL}/api/v1/user/sign-up`,{
+                        name: detail.name, 
+                        email: detail.email, 
+                        password: detail.password
+                    });
+                    console.log(res)
+                }}>Sign up</PrimaryButton>
             </div>
         </div>
         </div>

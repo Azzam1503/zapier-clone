@@ -1,8 +1,9 @@
 "use client"
-const Input = ({label, placeholder, onChange, type = "text"}: {
+const Input = ({label, name, placeholder, onChange, type = "text"}: {
     label: string,
     placeholder: string,
-    onChange: (e: React.FormEvent) => void,
+    name: string,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     type?: "text" | "password"
 }) => {
     return <div>
@@ -10,7 +11,7 @@ const Input = ({label, placeholder, onChange, type = "text"}: {
             * <label htmlFor="">{label}</label>
         </div>
         
-        <input className="border rounded px-2 py-2 w-full" type={type} placeholder={placeholder} onChange={onChange}/>
+        <input className="border rounded px-2 py-2 w-full" type={type} name={name} placeholder={placeholder} onChange={onChange}/>
     </div>
 }
 
