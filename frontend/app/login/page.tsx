@@ -17,6 +17,14 @@ export default () => {
         setDetails((prev) => ({...prev, [name]: value}));
     }
 
+    const handleLogin = async () => {
+        const res = await axios.post(`${BACKEND_URL}/api/v1/user/sign-in`,{
+            email: detail.email, 
+            password: detail.password
+        },{withCredentials: true});
+        console.log(res.data.token)
+    }
+
     return (
         <div>
             <Appbar />
@@ -38,13 +46,7 @@ export default () => {
                 <Input label="email" name="email" placeholder="email" onChange={handleChange} />
                 <Input label="password" name="password" placeholder="passowrd" type="password" onChange={handleChange} />
                 <br />
-                <PrimaryButton size="big" onClick={async () => {
-                    const res = await axios.post(`${BACKEND_URL}/api/v1/user/sign-in`,{
-                        email: detail.email, 
-                        password: detail.password
-                    });
-                    console.log(res.data.token)
-                }}>Login up</PrimaryButton>
+                <PrimaryButton size="big" onClick={handleLogin}>Login up</PrimaryButton>
             </div>
         </div>
         </div>
