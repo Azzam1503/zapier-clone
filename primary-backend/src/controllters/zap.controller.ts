@@ -52,9 +52,9 @@ export const createZap = async (req: CustomRequest, res: Response) => {
     }
 };
 
-export const getZaps = async (req: Request, res: Response) => {
+export const getZaps = async (req: CustomRequest, res: Response) => {
     try {
-            const id = req.body.id;
+            const id = req.user?.id;
             const zaps = await prismaClient.zap.findMany({
                 where: {
                     userId: id

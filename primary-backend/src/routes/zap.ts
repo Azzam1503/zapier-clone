@@ -5,7 +5,7 @@ import authCheck from "../middlewares/auth.middleware";
 const router = Router();
 
 router.post("/", authCheck, createZap);
-router.get("/zaps", authCheck, getZaps);
+router.get("/", authCheck, getZaps);
 router.get("/:id", authCheck, getZap);
 
 export default router;

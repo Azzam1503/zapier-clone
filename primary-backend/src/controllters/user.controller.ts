@@ -49,10 +49,15 @@ export const loginUser = async (req: Request, res: Response) => {
         if(!user) return res.status(401).json({message: "Incorrect credentials"});
         const matchPassword = await bcrytjs.compare(password, user.password);
         if(!matchPassword) return res.status(401).json({message: "Incorrect credentials"});
-        console.log("login", user);
-        const token =  jwt.sign({sub: user.id, email: user.email, name: user.name}, JWT_PASSWORD);
-        res.cookie("Authorization", token);
-        // console.log(token);
+   
+        const exp = Date.now() + 1000*60 * 60 * 24 * 30;
+        const token =  jwt.sign({sub: user.id, email: user.email, name: user.name, exp}, JWT_PASSWORD);
+        res.cookie("Authorization", token, {
+            expires: new Date(exp),
+            httpOnly: true,
+            sameSite: "lax",
+            secure: process.env.NODE_ENV === "production"
+        });
         return res.json({token});
 
     } catch (error) {
