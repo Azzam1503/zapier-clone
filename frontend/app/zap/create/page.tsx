@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/app/config";
 import { Appbar } from "@/components/Appbar";
 import LinkButton from "@/components/buttons/LinkButton";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
@@ -6,6 +7,8 @@ import Modal from "@/components/Modal";
 import ZapCell from "@/components/ZapCell";
 import useGetActions, { AvailableAction } from "@/hooks/useGetActions";
 import useGetTriggers, { AvailableTrigger } from "@/hooks/useGetTriggers";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function () {
@@ -23,22 +26,42 @@ export default function () {
 
   const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>();
 
-  const [availableActions, setAvailableActions] = useState<AvailableAction[]>(
-    []
-  );
-  const [availableTriiger, setAvailableTriggers] = useState<AvailableTrigger[]>(
-    []
-  );
-
+  const router = useRouter();
   const { actions } = useGetActions();
   const { triggers } = useGetTriggers();
-  useEffect(() => {
-    setAvailableActions(actions);
-    setAvailableTriggers(triggers);
-  }, [actions, triggers]);
   return (
-    <div className="">
+    <div>
       <Appbar />
+      <div className="flex justify-end bg-slate-200 p-4">
+        <PrimaryButton
+          onClick={async () => {
+            if (!seletedTrigger?.id) return;
+            console.log("checking", selectedActions);
+            try {
+              const response = await axios.post(
+                `${BACKEND_URL}/api/v1/zap`,
+                {
+                  availableTriggerId: seletedTrigger?.id,
+                  triggerMetadata: {},
+                  actions: selectedActions.map((a) => ({
+                    availableActionId: a.availableActionId,
+                    actionMetadata: {},
+                  })),
+                },
+                {
+                  withCredentials: true,
+                }
+              );
+              console.log(response);
+              router.push("/dashboard");
+            } catch (error) {
+              console.log(error);
+            }
+          }}
+        >
+          Publish
+        </PrimaryButton>
+      </div>
       <div className="w-full min-h-screen bg-slate-200 flex flex-col justify-center">
         <div className="flex justify-center w-full">
           <ZapCell
@@ -109,9 +132,7 @@ export default function () {
               });
             }
           }}
-          availableItems={
-            selectedModalIndex === 1 ? availableTriiger : availableActions
-          }
+          availableItems={selectedModalIndex === 1 ? triggers : actions}
           index={selectedModalIndex}
         />
       )}

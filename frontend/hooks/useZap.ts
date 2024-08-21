@@ -10,6 +10,7 @@ interface Action {
   type: {
     id: string;
     name: string;
+    image: string;
   };
 }
 interface Trigger {
@@ -19,6 +20,7 @@ interface Trigger {
   type: {
     id: string;
     name: string;
+    image: string
   };
 }
 export interface Zap {

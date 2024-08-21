@@ -49,6 +49,7 @@ export default function Modal({
                       id: item.id,
                       name: item.name,
                     });
+                    onSelect(null);
                   }}
                 >
                   <img
