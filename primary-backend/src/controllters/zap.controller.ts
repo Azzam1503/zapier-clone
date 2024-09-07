@@ -4,7 +4,6 @@ import { prismaClient } from "../db";
 import { CustomRequest } from "../middlewares/auth.middleware";
 
 export const createZap = async (req: CustomRequest, res: Response) => {
-    console.log("here baby");
     try {
     const body = req.body;
     const parsedData = ZapCreateSchema.safeParse(body);
@@ -20,7 +19,8 @@ export const createZap = async (req: CustomRequest, res: Response) => {
             actions: {
                 create: parsedData.data.actions.map((x, index) => ({
                     actionId: x.availableActionId,
-                    sortingOrder: index
+                    sortingOrder: index,
+                    metadata: x.actionMetadata
                 }))
             }
             }
@@ -31,7 +31,7 @@ export const createZap = async (req: CustomRequest, res: Response) => {
             data: {
                 trigerrId: parsedData.data.availableTriggerId,
                 zapId: zap.id
-            }
+            } 
         })
         console.log("trigger", trigger)
         const updted = await tx.zap.update({
