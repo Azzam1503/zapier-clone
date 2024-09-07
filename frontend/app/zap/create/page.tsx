@@ -21,10 +21,13 @@ export default function () {
       index: number;
       availableActionId: string;
       availableActionName: string;
+      metadata: any;
     }[]
   >([]);
 
-  const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>();
+  const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(
+    null
+  );
 
   const router = useRouter();
   const { actions } = useGetActions();
@@ -45,7 +48,7 @@ export default function () {
                   triggerMetadata: {},
                   actions: selectedActions.map((a) => ({
                     availableActionId: a.availableActionId,
-                    actionMetadata: {},
+                    actionMetadata: a.metadata,
                   })),
                 },
                 {
@@ -100,6 +103,7 @@ export default function () {
                   index: a.length + 2,
                   availableActionId: "",
                   availableActionName: "",
+                  metadata: {},
                 },
               ]);
             }}
@@ -110,7 +114,9 @@ export default function () {
       </div>
       {selectedModalIndex && (
         <Modal
-          onSelect={(props: null | { name: string; id: string }) => {
+          onSelect={(
+            props: null | { name: string; id: string; metadata?: any }
+          ) => {
             if (props == null) {
               setSelectedModalIndex(null);
               return;
@@ -127,10 +133,12 @@ export default function () {
                   index: selectedModalIndex,
                   availableActionId: props.id,
                   availableActionName: props.name,
+                  metadata: props.metadata,
                 };
                 return newActions;
               });
             }
+            setSelectedModalIndex(null);
           }}
           availableItems={selectedModalIndex === 1 ? triggers : actions}
           index={selectedModalIndex}

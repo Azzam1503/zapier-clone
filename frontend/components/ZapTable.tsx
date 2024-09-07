@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import LinkButton from "./buttons/LinkButton";
 import { Zap } from "@/hooks/useZap";
+import { HOOKS_URL } from "@/app/config";
 function ZapTable({ zaps }: { zaps: Zap[] }) {
   const router = useRouter();
   return (
@@ -9,6 +10,7 @@ function ZapTable({ zaps }: { zaps: Zap[] }) {
         <div className="flex-1">Name</div>
         <div className="flex-1">ID</div>
         <div className="flex-1">Created at</div>
+        <div className="flex-1">Webhook URL</div>
         <div className="flex-1">Go</div>
       </div>
       <div>
@@ -34,6 +36,9 @@ function ZapTable({ zaps }: { zaps: Zap[] }) {
             </div>
             <div className="flex-1">{zap.id}</div>
             <div className="flex-1">Nov 13, 2023</div>
+            <div className="flex-1">
+              `{HOOKS_URL}/hooks/catch/1/${zap.id}`
+            </div>
             <div className="flex-1">
               <LinkButton
                 onClick={() => {
