@@ -37,7 +37,7 @@ function ZapTable({ zaps }: { zaps: Zap[] }) {
             <div className="flex-1">{zap.id}</div>
             <div className="flex-1">Nov 13, 2023</div>
             <div className="flex-1">
-              `{HOOKS_URL}/hooks/catch/1/${zap.id}`
+              {HOOKS_URL}/hooks/catch/1/{zap.id}
             </div>
             <div className="flex-1">
               <LinkButton
